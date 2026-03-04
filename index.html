@@ -3,165 +3,378 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AR 2028 - Alternatiba at Reporma 2028</title>
+    <title>AR 2028 - Alternatiba at Reporma</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@700;800;900&family=Barlow+Condensed:wght@400;600;700&family=Caveat:wght@700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --blue:      #1553c7;
+            --blue-mid:  #2563eb;
+            --sky:       #60b8e0;
+            --skylight:  #c5e8f7;
+            --red:       #dc2626;
+            --red-mid:   #ef4444;
+            --gold:      #fbbf24;
+            --white:     #f8faff;
+            --ink:       #0b2045;
         }
-
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0a1929 0%, #1f3cff 100%);
+            font-family: 'Barlow Condensed', sans-serif;
+            background: var(--ink);
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+            overflow-x: hidden;
+            cursor: none;
         }
 
-        .container {
-            background: linear-gradient(145deg, #0d1f3d 0%, #132a52 100%);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 20px 60px rgba(31, 60, 255, 0.4);
-            max-width: 500px;
-            width: 100%;
-            text-align: center;
-            border: 2px solid #1f3cff;
+        /* CUSTOM CURSOR */
+        #cursor {
+            position: fixed; width: 14px; height: 14px;
+            background: var(--gold); border-radius: 50%;
+            pointer-events: none; z-index: 9999;
+            transform: translate(-50%,-50%);
+            mix-blend-mode: difference;
+        }
+        #cursor-ring {
+            position: fixed; width: 36px; height: 36px;
+            border: 2px solid rgba(251,191,36,.5); border-radius: 50%;
+            pointer-events: none; z-index: 9998;
+            transform: translate(-50%,-50%);
         }
 
-        .logo {
-            margin-bottom: 20px;
+        /* PARTICLES */
+        #particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+
+        /* BACKGROUND */
+        .bg {
+            position: fixed; inset: 0; z-index: 0;
+            background:
+                radial-gradient(ellipse 80% 60% at 20% 10%, rgba(21,83,199,.55) 0%, transparent 65%),
+                radial-gradient(ellipse 60% 70% at 85% 80%, rgba(220,38,38,.45) 0%, transparent 60%),
+                radial-gradient(ellipse 100% 100% at 50% 50%, #0b2045 40%, #061224 100%);
+        }
+        .bg::after {
+            content: '';
+            position: absolute; inset: 0;
+            background-image: repeating-linear-gradient(
+                -45deg, transparent 0px, transparent 28px,
+                rgba(255,255,255,.018) 28px, rgba(255,255,255,.018) 29px
+            );
         }
 
-        h1 {
-            color: #ffffff;
-            font-size: 26px;
-            margin-bottom: 30px;
-            text-shadow: 0 0 20px rgba(31, 60, 255, 0.5);
-            letter-spacing: 1px;
+        /* RIBBON */
+        .ribbon {
+            position: fixed; top: 0; left: 0; width: 100%; height: 5px; z-index: 50;
+            background: linear-gradient(90deg, var(--blue) 0%, var(--sky) 33%, var(--white) 50%, var(--red) 66%, var(--gold) 100%);
+            background-size: 200% 100%;
+            animation: ribbonSlide 4s linear infinite;
+        }
+        @keyframes ribbonSlide { 0%{background-position:0%} 100%{background-position:200%} }
+
+        /* PAGE */
+        .page {
+            position: relative; z-index: 10;
+            min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+            padding: 60px 20px 80px;
         }
 
-        .social-links {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
+        /* BADGE */
+        .election-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(255,255,255,.06);
+            border: 1px solid rgba(255,255,255,.15);
+            backdrop-filter: blur(10px);
+            border-radius: 50px; padding: 7px 20px;
+            font-size: 11px; font-weight: 700; letter-spacing: 3px;
+            color: var(--skylight); text-transform: uppercase;
+            margin-bottom: 32px;
+            animation: floatIn .7s cubic-bezier(.34,1.56,.64,1) both;
         }
+        .badge-dot {
+            width: 7px; height: 7px; border-radius: 50%; background: var(--gold);
+            animation: pulse 1.8s ease-in-out infinite;
+        }
+        @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(1.5)} }
+
+        /* HERO */
+        .hero { text-align: center; margin-bottom: 14px; animation: floatIn .7s .1s cubic-bezier(.34,1.56,.64,1) both; }
+        .tagline {
+            font-family: 'Caveat', cursive; font-size: clamp(16px,4vw,21px);
+            color: var(--sky); margin-bottom: 8px;
+        }
+        .title-ar {
+            font-family: 'Montserrat Alternates', sans-serif;
+            font-weight: 900; font-size: clamp(54px,15vw,90px);
+            line-height: .88; letter-spacing: -2px; color: var(--white);
+            position: relative; display: inline-block;
+        }
+        .title-ar .ar { color: var(--gold); }
+        .title-sub {
+            font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
+            font-size: clamp(13px,3.5vw,17px); letter-spacing: 5px;
+            color: rgba(255,255,255,.55); text-transform: uppercase; margin-top: 6px;
+        }
+
+        /* YEAR STAMP */
+        .year-stamp {
+            display: inline-block;
+            font-family: 'Montserrat Alternates', sans-serif; font-weight: 900;
+            font-size: clamp(11px,3vw,14px); letter-spacing: 6px;
+            color: var(--red-mid); border: 2px solid var(--red-mid);
+            border-radius: 4px; padding: 4px 14px; margin-top: 10px;
+            position: relative;
+            animation: floatIn .7s .18s cubic-bezier(.34,1.56,.64,1) both;
+        }
+        .year-stamp::before, .year-stamp::after {
+            content: '★'; position: absolute; top: 50%; transform: translateY(-50%);
+            font-size: 9px; color: var(--gold);
+        }
+        .year-stamp::before { left: -16px; }
+        .year-stamp::after  { right: -16px; }
+
+        /* DIVIDER */
+        .fancy-divider {
+            display: flex; align-items: center; gap: 12px;
+            width: 100%; max-width: 360px; margin: 28px 0 22px;
+            animation: floatIn .7s .22s both;
+        }
+        .fancy-divider .line {
+            flex: 1; height: 1px;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,.2), transparent);
+        }
+        .fancy-divider .sun {
+            font-size: 20px; color: var(--gold);
+            animation: spinSlow 10s linear infinite;
+        }
+        @keyframes spinSlow { to { transform: rotate(360deg); } }
+
+        .connect-label {
+            font-size: 10px; font-weight: 700; letter-spacing: 4px;
+            text-transform: uppercase; color: rgba(255,255,255,.4);
+            margin-bottom: 20px; animation: floatIn .7s .25s both;
+        }
+
+        /* SOCIAL BUTTONS */
+        .social-links { display: flex; flex-direction: column; gap: 13px; width: 100%; max-width: 400px; }
 
         .social-button {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 15px 25px;
-            border-radius: 12px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 16px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            color: white;
+            display: flex; align-items: center; text-decoration: none; color: white;
+            border-radius: 18px; overflow: hidden; position: relative;
+            transition: transform .3s cubic-bezier(.34,1.56,.64,1), box-shadow .3s;
+            border: 1px solid rgba(255,255,255,.08);
+        }
+        .social-button:hover { transform: translateX(6px) scale(1.02); }
+        .social-button::after {
+            content: ''; position: absolute; top: 0; left: -80%;
+            width: 60%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,.12), transparent);
+            transform: skewX(-15deg); transition: left .6s ease;
+        }
+        .social-button:hover::after { left: 130%; }
+
+        .btn-icon {
+            width: 60px; height: 60px; flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(0,0,0,.2);
+        }
+        .btn-icon svg { width: 22px; height: 22px; fill: white; }
+        .btn-body { flex: 1; padding: 0 16px 0 8px; }
+        .btn-platform { font-size: 9px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; opacity: .6; margin-bottom: 1px; }
+        .btn-cta { font-size: 16px; font-weight: 700; letter-spacing: .5px; }
+        .btn-arrow { padding-right: 18px; font-size: 18px; opacity: .5; }
+
+        .facebook  { background: linear-gradient(135deg,#1877f2,#1250b0); }
+        .facebook:hover  { box-shadow: 0 16px 36px rgba(24,119,242,.45); }
+        .tiktok    { background: linear-gradient(135deg,#0f1923,#1a2535); border: 1px solid rgba(96,184,224,.2); }
+        .tiktok:hover    { box-shadow: 0 16px 36px rgba(0,0,0,.5); border-color: var(--sky); }
+        .instagram { background: linear-gradient(135deg,#dc2626,#991b1b); }
+        .instagram:hover { box-shadow: 0 16px 36px rgba(220,38,38,.45); }
+
+        .social-button:nth-child(1) { animation: slideRight .5s .35s both; }
+        .social-button:nth-child(2) { animation: slideRight .5s .45s both; }
+        .social-button:nth-child(3) { animation: slideRight .5s .55s both; }
+        @keyframes slideRight { from{opacity:0;transform:translateX(-30px)} to{opacity:1;transform:translateX(0)} }
+
+
+
+        /* QUOTE TICKER */
+        .ticker-wrap { width: 100%; max-width: 400px; overflow: hidden; margin-top: 18px; animation: floatIn .7s .7s both; }
+        .ticker-inner {
+            background: rgba(21,83,199,.25); border: 1px solid rgba(21,83,199,.4);
+            border-radius: 12px; padding: 11px 18px;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .ticker-icon { font-size: 14px; flex-shrink: 0; }
+        .ticker-text {
+            font-size: 13px; font-weight: 600; color: var(--skylight);
+            font-style: italic; transition: opacity .4s, transform .4s;
         }
 
-        .social-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(31, 60, 255, 0.4);
-        }
+        /* FOOTER */
+        .footer { margin-top: 36px; text-align: center; animation: floatIn .7s .75s both; }
+        .flag-bar { display: flex; width: 120px; height: 4px; border-radius: 4px; overflow: hidden; margin: 0 auto 12px; }
+        .flag-bar div { flex: 1; }
+        .footer-text { font-size: 11px; color: rgba(255,255,255,.35); letter-spacing: 1px; }
+        .footer-text strong { color: rgba(255,255,255,.6); }
 
-        .social-button svg {
-            width: 24px;
-            height: 24px;
-            margin-right: 12px;
-            fill: white;
-        }
+        @keyframes floatIn { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
 
-        .facebook {
-            background: linear-gradient(135deg, #1f3cff 0%, #1877f2 100%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .facebook:hover {
-            background: linear-gradient(135deg, #1534e6 0%, #0d65d9 100%);
-            box-shadow: 0 10px 30px rgba(31, 60, 255, 0.6);
-        }
-
-        .tiktok {
-            background: linear-gradient(135deg, #0a1929 0%, #1a2942 100%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .tiktok:hover {
-            background: linear-gradient(135deg, #1a2942 0%, #1f3cff 100%);
-            box-shadow: 0 10px 30px rgba(31, 60, 255, 0.6);
-        }
-
-        .instagram {
-            background: linear-gradient(135deg, #1f3cff 0%, #5865ff 100%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .instagram:hover {
-            background: linear-gradient(135deg, #1534e6 0%, #4553e6 100%);
-            box-shadow: 0 10px 30px rgba(31, 60, 255, 0.6);
-        }
-
-        .footer {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(31, 60, 255, 0.3);
-            color: #a0b4d4;
-            font-size: 14px;
-        }
-
-        @media (max-width: 480px) {
-            .container {
-                padding: 30px 20px;
-            }
-
-            h1 {
-                font-size: 24px;
-            }
-
-            .social-button {
-                font-size: 14px;
-                padding: 12px 20px;
-            }
+        @media (max-width: 420px) {
+            .page { padding: 50px 16px 70px; }
+            .btn-icon { width: 52px; height: 52px; }
+            .btn-cta { font-size: 14px; }
+            .stat-num { font-size: 18px; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="logo">
-            <h1>ALTERNATIBA AT REPORMA 2028</h1>
-        </div>
-        
-        <div class="social-links">
-            <a href="#" class="social-button facebook">
-                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                </svg>
-                Follow us on Facebook
-            </a>
 
-            <a href="#" class="social-button tiktok">
-                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
-                </svg>
-                Watch on TikTok
-            </a>
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+<canvas id="particles"></canvas>
+<div class="bg"></div>
+<div class="ribbon"></div>
 
-            <a href="#" class="social-button instagram">
-                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                </svg>
-                Follow on Instagram
-            </a>
-        </div>
+<div class="page">
 
-        <div class="footer">
-            <p>Connect with us on social media</p>
-            <p>Alternatiba at Reporma 2028</p>
+    <div class="election-badge">
+        <div class="badge-dot"></div>
+        Halalan 2028 &nbsp;·&nbsp; Official Page
+    </div>
+
+    <div class="hero">
+        <div class="tagline">Una Ka, Pilipino! Una Ka, Pilipinas!</div>
+        <div class="title-ar"><span class="ar">AR</span><br>2028</div>
+        <div class="title-sub">Alternatiba at Reporma</div>
+    </div>
+
+    <div class="year-stamp">PARA SA PILIPINO</div>
+
+    <div class="fancy-divider">
+        <div class="line"></div>
+        <div class="sun">☀</div>
+        <div class="line"></div>
+    </div>
+
+    <div class="connect-label">Sumali sa aming komunidad</div>
+
+    <div class="social-links">
+
+        <a href="#" class="social-button facebook">
+            <div class="btn-icon">
+                <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            </div>
+            <div class="btn-body">
+                <div class="btn-platform">Facebook Page</div>
+                <div class="btn-cta">Sundan kami sa Facebook</div>
+            </div>
+            <div class="btn-arrow">›</div>
+        </a>
+
+        <a href="#" class="social-button tiktok">
+            <div class="btn-icon">
+                <svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/></svg>
+            </div>
+            <div class="btn-body">
+                <div class="btn-platform">TikTok</div>
+                <div class="btn-cta">Panoorin kami sa TikTok</div>
+            </div>
+            <div class="btn-arrow">›</div>
+        </a>
+
+        <a href="#" class="social-button instagram">
+            <div class="btn-icon">
+                <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            </div>
+            <div class="btn-body">
+                <div class="btn-platform">Instagram</div>
+                <div class="btn-cta">Sundan kami sa Instagram</div>
+            </div>
+            <div class="btn-arrow">›</div>
+        </a>
+
+    </div>
+
+
+
+    <!-- Quote ticker -->
+    <div class="ticker-wrap">
+        <div class="ticker-inner">
+            <span class="ticker-icon">💬</span>
+            <span class="ticker-text" id="ticker">"Ang pagbabago ay nagsisimula sa bawat Pilipino."</span>
         </div>
     </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="flag-bar">
+            <div style="background:#1553c7;"></div>
+            <div style="background:#1553c7;"></div>
+            <div style="background:#f8faff;"></div>
+            <div style="background:#dc2626;"></div>
+            <div style="background:#dc2626;"></div>
+        </div>
+        <div class="footer-text">
+            <strong>Alternatiba at Reporma 2028</strong><br>
+            Para sa Pilipino · Para sa Pilipinas
+        </div>
+    </div>
+
+</div>
+
+<script>
+// CUSTOM CURSOR
+const cur = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+(function animCursor(){
+    cur.style.left=mx+'px'; cur.style.top=my+'px';
+    rx+=(mx-rx)*.12; ry+=(my-ry)*.12;
+    ring.style.left=rx+'px'; ring.style.top=ry+'px';
+    requestAnimationFrame(animCursor);
+})();
+
+// PARTICLES
+const canvas=document.getElementById('particles');
+const ctx=canvas.getContext('2d');
+let W,H,pts=[];
+function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+resize(); window.addEventListener('resize',resize);
+const COLS=['rgba(21,83,199,.6)','rgba(220,38,38,.5)','rgba(251,191,36,.5)','rgba(96,184,224,.4)'];
+for(let i=0;i<55;i++) pts.push({x:Math.random()*1400,y:Math.random()*900,r:Math.random()*2+.5,vx:(Math.random()-.5)*.35,vy:(Math.random()-.5)*.35,c:COLS[0|Math.random()*4]});
+(function draw(){
+    ctx.clearRect(0,0,W,H);
+    pts.forEach(p=>{
+        p.x+=p.vx; p.y+=p.vy;
+        if(p.x<0)p.x=W; if(p.x>W)p.x=0;
+        if(p.y<0)p.y=H; if(p.y>H)p.y=0;
+        ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+        ctx.fillStyle=p.c; ctx.fill();
+    });
+    requestAnimationFrame(draw);
+})();
+
+
+
+// ROTATING QUOTES
+const quotes=[
+    '"Ang pagbabago ay nagsisimula sa bawat Pilipino."',
+    '"Isang bansa, isang diwa, isang puso."',
+    '"Sama-sama nating itayo ang kinabukasan ng Pilipinas."',
+    '"Reporma para sa lahat — hindi lang sa iilan."',
+    '"Una Ka, Pilipino! Una Ka, Pilipinas!"'
+];
+let qi=0;
+const ticker=document.getElementById('ticker');
+setInterval(()=>{
+    ticker.style.opacity='0'; ticker.style.transform='translateY(8px)';
+    setTimeout(()=>{
+        qi=(qi+1)%quotes.length; ticker.textContent=quotes[qi];
+        ticker.style.opacity='1'; ticker.style.transform='translateY(0)';
+    },420);
+},4000);
+</script>
 </body>
 </html>
